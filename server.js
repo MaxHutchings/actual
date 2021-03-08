@@ -22,12 +22,20 @@ async function postInv(req, res) {
 }
 
 async function getInventory(req, res) {
-  const result = await inventoryDB.getInventory(req.params.id);
+  const result = await inventoryDB.getInventory();
   if (!result) {
     res.status(404).send('No match for that ID');
     return;
   }
   res.json(result);
+}
+
+async function updateStock(req, res) {
+  res.json(await inventoryDB.updateStock(req.body));
+}
+
+async function removeItem(req, res) {
+  res.json(await inventoryDB.removeItem(req.body));
 }
 
 // Handles resolving promises
@@ -41,6 +49,8 @@ function asyncWrap(f) {
 
 app.post('/item', express.json(), asyncWrap(postInv));
 app.get('/inventory', express.json(), asyncWrap(getInventory));
+app.post('/update', express.json(), asyncWrap(updateStock));
+app.post('/remove', express.json(), asyncWrap(removeItem));
 
 
 // Access on port 8080
