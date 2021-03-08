@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Inventory Management</title>
+    <script type="text/javascript" src="index.js"></script>
+  </head>
+
+
+  <body>
+
+
+    <form id="newItems">
+      <h1>Enter New Item</h1>
+      <div>
+        <div>
+          <label for="upc">Enter the barcode number:</label>
+          <input type="text" id="upc" placeholder="Barcode...">
+        </div>
+        <div>
+          <label for="iName">Enter the name of this item:</label>
+          <input type="text" id="iName" placeholder="Item Name...">
+        </div>
+        <div>
+          <label for="stock">Enter the stock / weight of this item:</label>
+          <input type="text" id="stock" placeholder="Stock...">
+        </div>
+        <div>
+          <label for="minStock">Enter the minimum amount of this item that you want:</label>
+          <input type="text" id="minStock" placeholder="Minimum Stock...">
+        </div>
+        <div>
+          <label for="UBD">Enter the use-by-date:</label>
+          <input type="text" id="UBD" placeholder="Use-By-Date...">
+        </div>
+      </div>
+    </form>
+    <div>
+        <button id="submit" type="button">Create Item</button>
+    </div>
+
+    <div id="inventory">
+
+    </div>
+  </body>
+</html>

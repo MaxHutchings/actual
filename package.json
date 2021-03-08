@@ -1,0 +1,20 @@
+{
+  "name": "actual",
+  "version": "0.0.1",
+  "description": "Home Inventory Management",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server"
+  },
+  "author": "Max Hutchings",
+  "license": "ISC",
+  "dependencies": {
+    "cloudmersive-barcodeapi-client": "^1.1.5",
+    "express": "^4.17.1",
+    "sqlite": "^3.0.3"
+  },
+  "devDev": {
+    "node-pre-gyp": "0.12.0"
+  }
+}
