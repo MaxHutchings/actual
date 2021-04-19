@@ -1,7 +1,7 @@
 -- Up
 
 CREATE TABLE Inventory (
-  upc CHAR(12) PRIMARY KEY,
+  upc CHAR(13) PRIMARY KEY,
   itemName TEXT,
   stock INT,
   minStock INT,
@@ -9,10 +9,9 @@ CREATE TABLE Inventory (
 );
 
 CREATE TABLE ShoppingList (
-  SL_id CHAR(36) PRIMARY KEY,
-  upc CHAR(12),
+  upc CHAR(13) PRIMARY KEY,
   itemName TEXT,
-  FOREIGN KEY(upc) REFERENCES Inventory(upc)
+  toBuy TEXT
 );
 
 -- Down

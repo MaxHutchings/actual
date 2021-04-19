@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Shopping List</title>
+    <script src="/js/shopping_list.js"></script>
+    <link rel="stylesheet" href="/css/master.css">
+    <link rel="stylesheet" href="/css/shopping_list.css">
+  </head>
+
+  <body>
+    <div>
+      <a href="index">HOME PAGE |</a>
+      <a href="create_item">CREATE ITEM |</a>
+      <a href="view_inventory">INVENTORY |</a>
+      <a href="shopping_list">SHOPPING LIST</a>
+    </div>
+
+    <div>
+      <h1>Shopping List</h1>
+
+      <table>
+        <thead>
+          <th>Item Name</th>
+          <th>No. To Buy</th>
+        </thead>
+        <tbody id="shopList"></tbody>
+        <tfoot>
+          <td colspan="2" align="right">Total No. of Items</td>
+          <td id="total"></td>
+        </tfoot>
+      </table>
+    </div>
+  </body>
+</html>

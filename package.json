@@ -10,9 +10,10 @@
   "author": "Max Hutchings",
   "license": "ISC",
   "dependencies": {
-    "cloudmersive-barcodeapi-client": "^1.1.5",
     "express": "^4.17.1",
-    "sqlite": "^3.0.3"
+    "quagga": "^0.12.1",
+    "sqlite": "^3.0.3",
+    "uuid-random": "^1.3.0"
   },
   "devDev": {
     "node-pre-gyp": "0.12.0"

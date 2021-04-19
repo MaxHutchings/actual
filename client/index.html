@@ -3,12 +3,19 @@
   <head>
     <meta charset="utf-8">
     <title>Inventory Management</title>
-    <script type="text/javascript" src="index.js"></script>
-    <link rel="stylesheet" href="index.css">
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="/css/master.css">
   </head>
 
 
   <body>
+    <div>
+      <a href="index">HOME PAGE |</a>
+      <a href="create_item">CREATE ITEM |</a>
+      <a href="view_inventory">INVENTORY |</a>
+      <a href="shopping_list">SHOPPING LIST</a>
+    </div>
+    <h1>Create New Item</h1>
     <form id="newItems">
       <label for="upc">Enter the barcode number:</label>
       <input type="text" id="upc" placeholder="Barcode..." pattern="^\d{12,13}$" required="required">
@@ -26,7 +33,47 @@
     <div>
       <h1>Inventory</h1>
       <button type="button" id="saveChanges">Save Changes</button>
+
       <div id="inventory"></div>
+
+
+      <table>
+        <thead>
+          <th>Item Name</th>
+          <th>Barcode</th>
+          <th>Stock</th>
+          <th>Minimum Stock</th>
+          <th>Use-By-Date</th>
+          <th>Edit Stock</th>
+          <th>Edit Min Stock</th>
+          <th>Remove Item</th>
+        </thead>
+        <tbody id="fill"></tbody>
+        <tfoot>
+          <td colspan="7" align="right">Total No. of Items</td>
+          <td id="totalI"></td>
+        </tfoot>
+      </table>
+
+
     </div>
+
+    <div>
+      <h1>Shopping List</h1>
+
+      <table>
+        <thead>
+          <th>Item Name</th>
+          <th>No. To Buy</th>
+        </thead>
+        <tbody id="shopList"></tbody>
+        <tfoot>
+          <td colspan="2" align="right">Total No. of Items</td>
+          <td id="totalS"></td>
+        </tfoot>
+      </table>
+
+    </div>
+
   </body>
 </html>

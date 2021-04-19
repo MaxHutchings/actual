@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Create A New Item</title>
+    <script src="/js/add.js"></script>
+    <link rel="stylesheet" href="/css/add.css">
+    <link rel="stylesheet" href="/css/master.css">
+  </head>
+
+  <body>
+    <div>
+      <a href="index">HOME PAGE |</a>
+      <a href="create_item">CREATE ITEM |</a>
+      <a href="view_inventory">INVENTORY |</a>
+      <a href="shopping_list">SHOPPING LIST</a>
+    </div>
+
+    <div>
+      <h1>Create A New Item</h1>
+      <form id="newItems">
+        <label for="upc">Enter the barcode number:</label>
+        <input type="text" id="upc" placeholder="Barcode..." pattern="^\d{12,13}$" required="required">
+        <label for="iName">Enter the name of this item:</label>
+        <input type="text" id="iName" placeholder="Item Name..." required="required">
+        <label for="stock">Enter the stock / weight of this item:</label>
+        <input type="text" id="stock" placeholder="Stock..." required="required">
+        <label for="minStock">Enter the minimum amount of this item that you want:</label>
+        <input type="text" id="minStock" placeholder="Minimum Stock..." required="required">
+        <label for="UBD">Enter the use-by-date:</label>
+        <input type="date" id="UBD" required="required">
+        <input type="submit" id="submit2" value="Create Item">
+      </form>
+    </div>
+
+  </body>
+</html>

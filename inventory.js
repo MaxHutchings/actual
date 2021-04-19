@@ -35,27 +35,29 @@ async function getInventory() {
 async function updateStock(payload) {
   const db = await dbPromise;
   // Goes through each item in the given update list and determines what values are to be updated
-  payload.forEach(async function(item) {
-    // Both the stock and minimum stock values are being updated
-    if (item.hasOwnProperty('stock') && item.hasOwnProperty('minStock')) {
-      let id = item.id;
-      let stock = item.stock;
-      let minStock = item.minStock;
-      await db.run('UPDATE Inventory SET stock = ?, minStock = ? WHERE upc = ?', [stock, minStock, id]);
-    }
-    // Just the stock value is being updated
-    else if (item.hasOwnProperty('stock')) {
-      let id = item.id;
-      let stock = item.stock;
-      await db.run('UPDATE Inventory SET stock = ? WHERE upc = ?', [stock, id]);
-    }
-    // Just the minimum stock value is being updated
-    else if (item.hasOwnProperty('minStock')) {
-      let id = item.id;
-      let minStock = item.minStock;
-      await db.run('UPDATE Inventory SET minStock = ? WHERE upc = ?', [minStock, id]);
-    }
-  });
+  if (payload.length > 0) {
+    payload.forEach(async function(item) {
+      // Both the stock and minimum stock values are being updated
+      if (item.hasOwnProperty('stock') && item.hasOwnProperty('minStock')) {
+        let id = item.id;
+        let stock = item.stock;
+        let minStock = item.minStock;
+        await db.run('UPDATE Inventory SET stock = ?, minStock = ? WHERE upc = ?', [stock, minStock, id]);
+      }
+      // Just the stock value is being updated
+      else if (item.hasOwnProperty('stock')) {
+        let id = item.id;
+        let stock = item.stock;
+        await db.run('UPDATE Inventory SET stock = ? WHERE upc = ?', [stock, id]);
+      }
+      // Just the minimum stock value is being updated
+      else if (item.hasOwnProperty('minStock')) {
+        let id = item.id;
+        let minStock = item.minStock;
+        await db.run('UPDATE Inventory SET minStock = ? WHERE upc = ?', [minStock, id]);
+      }
+    });
+  }
 }
 
 // Delete item from the database based on the upc number
@@ -71,4 +73,4 @@ module.exports = {
   getInventory,
   updateStock,
   removeItem,
-}
+};
