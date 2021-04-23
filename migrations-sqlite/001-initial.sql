@@ -1,15 +1,20 @@
 -- Up
 
 CREATE TABLE Inventory (
-  upc CHAR(13) PRIMARY KEY,
+  id CHAR(36) PRIMARY KEY,
+  upc CHAR(13),
   itemName TEXT,
   stock INT,
   minStock INT,
-  usebydate TEXT
+  usebydate TEXT,
+  frozen TEXT,
+  fresh TEXT,
+  home TEXT
 );
 
 CREATE TABLE ShoppingList (
-  upc CHAR(13) PRIMARY KEY,
+  id CHAR(36) PRIMARY KEY,
+  upc CHAR(13),
   itemName TEXT,
   toBuy TEXT
 );

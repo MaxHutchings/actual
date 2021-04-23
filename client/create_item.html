@@ -9,29 +9,33 @@
   </head>
 
   <body>
-    <div>
-      <a href="index">HOME PAGE |</a>
-      <a href="create_item">CREATE ITEM |</a>
-      <a href="view_inventory">INVENTORY |</a>
-      <a href="shopping_list">SHOPPING LIST</a>
-    </div>
+    <nav>
+      <ul class="navBar">
+        <li><a href="index">HOME</a></li>
+        <li><a href="create_item">CREATE ITEM</a></li>
+        <li><a href="view_inventory">INVENTORY</a></li>
+        <li><a href="shopping_list">SHOPPING LIST</a></li>
+      </ul>
+    </nav>
 
-    <div>
-      <h1>Create A New Item</h1>
-      <form id="newItems">
-        <label for="upc">Enter the barcode number:</label>
-        <input type="text" id="upc" placeholder="Barcode..." pattern="^\d{12,13}$" required="required">
-        <label for="iName">Enter the name of this item:</label>
-        <input type="text" id="iName" placeholder="Item Name..." required="required">
-        <label for="stock">Enter the stock / weight of this item:</label>
-        <input type="text" id="stock" placeholder="Stock..." required="required">
-        <label for="minStock">Enter the minimum amount of this item that you want:</label>
-        <input type="text" id="minStock" placeholder="Minimum Stock..." required="required">
-        <label for="UBD">Enter the use-by-date:</label>
-        <input type="date" id="UBD" required="required">
-        <input type="submit" id="submit2" value="Create Item">
-      </form>
-    </div>
+    <main>
+
+      <div>
+        <h1>Create A New Item</h1>
+        <button type="button" id="yesButton">Add Item With a Barcode</button>
+        <button type="button" id="noButton">Add Item Without a Barcode</button>
+        <div id="formContainer"></div>
+      </div>
+
+      <div>
+        <form id="imageForm">
+          <input id="barImage" type="file" required="required">
+          <button type="button" id="subImage">Submit Image</button>
+        </form>
+        <img id="showImage" accept="image/JPG" src="" style="width:500px;height:600px;">
+      </div>
+
+    </main>
 
   </body>
 </html>

@@ -124,7 +124,7 @@ async function grabChanges() {
 
   // Cycle through each item and see if the values in the input boxes differ from the stored values, and gathers the values that were changed
   invList.forEach(function(item) {
-    let id = item.upc;
+    let id = item.id;
 
     let newStockBox = document.querySelector('#updateStock' + currentItem);
     let newMinBox = document.querySelector('#updateMinStock' + currentItem);
@@ -193,9 +193,9 @@ async function removeItem(itemNumber) {
   let lastNum = itemNumber.split('-')[1];
   // The item is then grabbed from the inventory list, the upc is then gathered
   let item2remove = invList[lastNum];
-  let barcodeID = item2remove.upc;
+  let itemID = item2remove.id;
   let payload = {};
-  payload.id = barcodeID;
+  payload.id = itemID;
 
   // Item ID is sent to the server for the item to be removed
   const response = await fetch('/remove', {
@@ -208,9 +208,11 @@ async function removeItem(itemNumber) {
 
 async function addItemShopping(item) {
   let shop = {};
+  shop.id = item.id;
   shop.name = item.itemName;
   shop.upc = item.upc;
   shop.toBuy = item.minStock - item.stock;
+  console.log(shop);
 
   const response = await fetch('/itemL', {
     method: 'POST',
@@ -221,8 +223,7 @@ async function addItemShopping(item) {
 
 async function removeItemShopping(item) {
   let shop = {};
-  shop.id = item.upc;
-
+  shop.id = item.id;
   const response = await fetch('/removeL', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
@@ -251,7 +252,7 @@ function isBelowThreshold(item) {
 }
 
 async function shouldAddToShopping(item) {
-  if (isBelowThreshold(item) && (await isInList(item.upc) == false)) {
+  if (isBelowThreshold(item) && (await isInList(item.id) == false)) {
     return true;
   } else {
     return false;
@@ -259,7 +260,7 @@ async function shouldAddToShopping(item) {
 }
 
 async function shouldRemoveShopping(item) {
-  if ((isBelowThreshold(item) === false) && await isInList(item.upc)) {
+  if ((isBelowThreshold(item) === false) && await isInList(item.id)) {
     return true;
   } else {
     return false;
@@ -291,8 +292,8 @@ function removeItem(item) {
   removeItemShopping(item);
 }
 
-async function isInList(itemUPC) {
-  const response = await fetch(`/isIn/${itemUPC}`);
+async function isInList(itemID) {
+  const response = await fetch(`/isIn/${itemID}`);
   let weewoo;
   if (response.ok) {
     weewoo = await response.json();

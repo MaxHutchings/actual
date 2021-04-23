@@ -1,0 +1,13 @@
+tfoot {
+  text-align: right;
+}
+
+#totalI {
+  text-align: center;
+}
+
+input[type="number"] {
+  background-color: #1B2132;
+  color: white;
+  text-align: center;
+}

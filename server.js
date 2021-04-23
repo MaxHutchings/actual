@@ -5,28 +5,87 @@ const express = require('express');
 const app = express();
 const inventoryDB = require('./inventory');
 const shoppingDB = require('./shopping');
+const multer = require('multer');
+const Quagga = require('quagga').default;
+
+
+const upload = multer({dest: 'uploads/'});
+
+
+
 
 // Removes the need to have html at the end of the URL
 app.use(express.static('client', {extensions: ['html']}));
 
 
-
-
-
-
 // *** TEST AREA ***
 
 // ***FOR LATER USE***
-// Converts a UPC number to a EAN number
-function upc2ean(upcValue) {
-  let ean = '0' + upcValue;
-  return ean
-}
+app.post("/upload",
+upload.single("image.png"),
+(req, res) => {
+  const tempPath = req.file.path;
+  const targetPath = path.join(__dirname, "./uploads/image.png");
+
+  if (path.extname(req.file.originalname).toLowerCase() === ".png") {
+    fs.rename(tempPath, targetPath, err => {
+      if (err) return handleError(err, res);
+
+      res
+        .status(200)
+        .contentType("text/plain")
+        .end("File uploaded!");
+    });
+  } else {
+    fs.unlink(tempPath, err => {
+      if (err) return handlerError(err, res);
+
+      res
+        .status(403)
+        .contentType("text/plain")
+        .end("Only .png files are allowed!");
+    });
+  }
+});
+
 
 // *** END OF TEST AREA ***
 
+async function getBarcode(req, res) {
+  let imageURL = await req.body.image;
+  let testing = doThing(imageURL);
+  console.log(testing);
+}
 
+function doThing(imageURL) {
+  return new Promise(resolve => {
+    let img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(imageURL);
+      resolve(img);
+    };
+    img.src = imageURL;
+  });
+}
 
+function runBarcodeAPI(image) {
+  Quagga.decodeSingle({
+      src: image,
+      numOfWorkers: 0,
+      inputStream: {
+        size: 800
+      },
+      decoder: {
+        readers: ["ean_reader"]
+      },
+  }, function(result) {
+      if(result.codeResult) {
+          console.log("result", result.codeResult.code);
+      } else {
+          console.log("not detected");
+      }
+  });
+}
 
 
 // INVENTORY DATABASE
@@ -104,6 +163,7 @@ app.get('/inventory', express.json(), asyncWrap(getInventory));
 app.post('/item', express.json(), asyncWrap(postInv));
 app.post('/update', express.json(), asyncWrap(updateStock));
 app.post('/remove', express.json(), asyncWrap(removeItem));
+app.post('/img_barcode', express.json(), asyncWrap(getBarcode));
 
 app.get('/list', express.json(), asyncWrap(getList));
 app.post('/removeL', express.json(), asyncWrap(removeList));

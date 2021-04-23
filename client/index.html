@@ -3,77 +3,22 @@
   <head>
     <meta charset="utf-8">
     <title>Inventory Management</title>
-    <script src="index.js"></script>
     <link rel="stylesheet" href="/css/master.css">
   </head>
 
 
   <body>
-    <div>
-      <a href="index">HOME PAGE |</a>
-      <a href="create_item">CREATE ITEM |</a>
-      <a href="view_inventory">INVENTORY |</a>
-      <a href="shopping_list">SHOPPING LIST</a>
-    </div>
-    <h1>Create New Item</h1>
-    <form id="newItems">
-      <label for="upc">Enter the barcode number:</label>
-      <input type="text" id="upc" placeholder="Barcode..." pattern="^\d{12,13}$" required="required">
-      <label for="iName">Enter the name of this item:</label>
-      <input type="text" id="iName" placeholder="Item Name..." required="required">
-      <label for="stock">Enter the stock / weight of this item:</label>
-      <input type="text" id="stock" placeholder="Stock..." required="required">
-      <label for="minStock">Enter the minimum amount of this item that you want:</label>
-      <input type="text" id="minStock" placeholder="Minimum Stock..." required="required">
-      <label for="UBD">Enter the use-by-date:</label>
-      <input type="date" id="UBD" required="required">
-      <input type="submit" id="submit2" value="Create Item">
-    </form>
+    <nav>
+      <ul class="navBar">
+        <li><a href="index">HOME</a></li>
+        <li><a href="create_item">CREATE ITEM</a></li>
+        <li><a href="view_inventory">INVENTORY</a></li>
+        <li><a href="shopping_list">SHOPPING LIST</a></li>
+      </ul>
+    </nav>
 
-    <div>
-      <h1>Inventory</h1>
-      <button type="button" id="saveChanges">Save Changes</button>
-
-      <div id="inventory"></div>
-
-
-      <table>
-        <thead>
-          <th>Item Name</th>
-          <th>Barcode</th>
-          <th>Stock</th>
-          <th>Minimum Stock</th>
-          <th>Use-By-Date</th>
-          <th>Edit Stock</th>
-          <th>Edit Min Stock</th>
-          <th>Remove Item</th>
-        </thead>
-        <tbody id="fill"></tbody>
-        <tfoot>
-          <td colspan="7" align="right">Total No. of Items</td>
-          <td id="totalI"></td>
-        </tfoot>
-      </table>
-
-
-    </div>
-
-    <div>
-      <h1>Shopping List</h1>
-
-      <table>
-        <thead>
-          <th>Item Name</th>
-          <th>No. To Buy</th>
-        </thead>
-        <tbody id="shopList"></tbody>
-        <tfoot>
-          <td colspan="2" align="right">Total No. of Items</td>
-          <td id="totalS"></td>
-        </tfoot>
-      </table>
-
-    </div>
+    <main>
+    </main>
 
   </body>
 </html>

@@ -9,37 +9,41 @@
   </head>
 
   <body>
-    <div>
-      <a href="index">HOME PAGE |</a>
-      <a href="create_item">CREATE ITEM |</a>
-      <a href="view_inventory">INVENTORY |</a>
-      <a href="shopping_list">SHOPPING LIST</a>
-    </div>
+    <nav>
+      <ul class="navBar">
+        <li><a href="index">HOME</a></li>
+        <li><a href="create_item">CREATE ITEM</a></li>
+        <li><a href="view_inventory">INVENTORY</a></li>
+        <li><a href="shopping_list">SHOPPING LIST</a></li>
+      </ul>
+    </nav>
 
-    <div>
-      <h1>Inventory</h1>
-      <button type="button" id="saveChanges">Save Changes</button>
-      <div id="inventory"></div>
+    <main>
 
-      <table>
-        <thead>
-          <th>Item Name</th>
-          <th>Barcode</th>
-          <th>Stock</th>
-          <th>Minimum Stock</th>
-          <th>Use-By-Date</th>
-          <th>Edit Stock</th>
-          <th>Edit Min Stock</th>
-          <th>Remove Item</th>
-        </thead>
-        <tbody id="fill"></tbody>
-        <tfoot>
-          <td colspan="7" align="right">Total No. of Items</td>
-          <td id="totalI"></td>
-        </tfoot>
-      </table>
-    </div>
+      <div>
+        <h1>Inventory</h1>
+        <button type="button" id="saveChanges">Save Changes</button>
+        <div id="inventory"></div>
 
+        <table>
+          <thead>
+            <th>Item Name</th>
+            <th>Barcode</th>
+            <th>Stock</th>
+            <th>Minimum Stock</th>
+            <th>Use-By-Date</th>
+            <th>Edit Stock</th>
+            <th>Edit Min Stock</th>
+            <th>Remove Item</th>
+          </thead>
+          <tbody id="fill"></tbody>
+          <tfoot>
+            <td colspan="7" align="right">Total No. of Items</td>
+            <td id="totalI"></td>
+          </tfoot>
+        </table>
+      </div>
 
+    </main>
   </body>
 </html>

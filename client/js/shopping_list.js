@@ -59,7 +59,7 @@ async function updateItemShopping(item) {
 }
 
 async function isValueDifferent(item) {
-  let response = await fetch(`/getItem/${item.upc}`);
+  let response = await fetch(`/getItem/${item.id}`);
   let kachow;
   if (response.ok) {
     kachow = await response.json();
@@ -86,7 +86,7 @@ async function handler() {
       let values = updateBuyList[q].minStock - updateBuyList[q].stock;
       if (storedValue !== values) {
         let sendItem = {};
-        sendItem.id = updateBuyList[q].upc;
+        sendItem.id = updateBuyList[q].id;
         sendItem.toBuy = values;
         updateItemShopping(sendItem);
       }

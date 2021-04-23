@@ -2,6 +2,7 @@
 
 // Load require modules
 const sqlite = require('sqlite');
+const uuid = require('uuid-random');
 
 // Initalises the inventory database
 async function init() {
@@ -15,13 +16,17 @@ const dbPromise = init();
 
 // Inserts an item into the database
 async function addItem(item) {
+  let id = uuid();
   let upc = item.upc;
   let itemName = item.itemName;
   let stock = item.stock;
   let minStock = item.minStock;
   let usebydate = item.usebydate;
+  let frozen = item.frozen;
+  let fresh = item.fresh;
+  let home = item.home;
   const db = await dbPromise;
-  await db.run('INSERT INTO Inventory VALUES (?, ?, ?, ?, ?)', [upc, itemName, stock, minStock, usebydate]);
+  await db.run('INSERT INTO Inventory VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [id, upc, itemName, stock, minStock, usebydate, frozen, fresh, home]);
 }
 
 // Returns the entire database
@@ -38,23 +43,21 @@ async function updateStock(payload) {
   if (payload.length > 0) {
     payload.forEach(async function(item) {
       // Both the stock and minimum stock values are being updated
+      let id = item.id;
       if (item.hasOwnProperty('stock') && item.hasOwnProperty('minStock')) {
-        let id = item.id;
         let stock = item.stock;
         let minStock = item.minStock;
-        await db.run('UPDATE Inventory SET stock = ?, minStock = ? WHERE upc = ?', [stock, minStock, id]);
+        await db.run('UPDATE Inventory SET stock = ?, minStock = ? WHERE id = ?', [stock, minStock, id]);
       }
       // Just the stock value is being updated
       else if (item.hasOwnProperty('stock')) {
-        let id = item.id;
         let stock = item.stock;
-        await db.run('UPDATE Inventory SET stock = ? WHERE upc = ?', [stock, id]);
+        await db.run('UPDATE Inventory SET stock = ? WHERE id = ?', [stock, id]);
       }
       // Just the minimum stock value is being updated
       else if (item.hasOwnProperty('minStock')) {
-        let id = item.id;
         let minStock = item.minStock;
-        await db.run('UPDATE Inventory SET minStock = ? WHERE upc = ?', [minStock, id]);
+        await db.run('UPDATE Inventory SET minStock = ? WHERE id = ?', [minStock, id]);
       }
     });
   }
@@ -64,7 +67,7 @@ async function updateStock(payload) {
 async function removeItem(payload) {
   const db = await dbPromise;
   let id = payload.id;
-  await db.run('DELETE FROM Inventory WHERE upc = ?', [id])
+  await db.run('DELETE FROM Inventory WHERE id = ?', [id])
 }
 
 // All usable functions that are accessable from outside of this file
