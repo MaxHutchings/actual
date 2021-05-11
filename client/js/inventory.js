@@ -15,14 +15,11 @@ function pageLoaded() {
 // Grab an store handles on commonly accessed elements
 async function prepareHandles() {
   elem.invOut = document.querySelector('#inventory');
-  elem.saveButton = document.querySelector('#saveChanges');
-  elem.table = document.querySelector('#fill');
-  elem.total = document.querySelector('#totalI');
+  elem.buttonContainer = document.querySelector('#buttons');
 }
 
 // Add event listeners
 async function addEventListeners() {
-  elem.saveButton.addEventListener('click', grabChanges);
 }
 
 async function returnInventory() {
@@ -40,7 +37,20 @@ async function returnInventory() {
 
 async function fillTable() {
   let invList = await returnInventory();
-  elem.table.innerHTML = "";
+  elem.invOut.innerHTML = "";
+  elem.buttonContainer.innerHTML = "";
+
+  let table = '<table><thead><th>Item Name</th><th>Stock</th><th>Minimum Stock</th><th>Use-By-Date</th><th>Frozen</th><th>Fresh</th><th>Homecooked</th></thead><tbody id="fill"></tbody><tfoot><td colspan="6" align="right">Total No. of Items</td><td id="totalI"></td></tfoot></table>';
+  let button = '<button type="button" id="edit">Edit</button>';
+
+  elem.invOut.innerHTML = table;
+  elem.buttonContainer.innerHTML = button;
+  elem.editButton = document.querySelector('#edit');
+
+  elem.table = document.querySelector('#fill');
+  elem.total = document.querySelector('#totalI');
+  elem.editButton.addEventListener('click', editTable);
+
 
   if (invList === "Failed") {
     let itemInfo = document.createElement('p');
@@ -55,60 +65,50 @@ async function fillTable() {
       // Item table row and item data
       let itemRow = document.createElement('tr');
       let itemName = document.createElement('td');
-      let itemBarcode = document.createElement('td');
       let itemStock = document.createElement('td');
       let itemMinStock = document.createElement('td');
       let itemUBD = document.createElement('td');
 
-      // Edit stock containers
-      let itemEStockC = document.createElement('td');
-      let itemEMStockC = document.createElement('td');
-
-      // Other containers
-      let itemRemoveC = document.createElement('td');
-
-      // Elements to be put inside containers
-      let itemEStock = document.createElement('input');
-      let itemEMStock = document.createElement('input');
-      let itemRemove = document.createElement('button');
+      let frozenCheckC = document.createElement('td');
+      let freshCheckC = document.createElement('td');
+      let homeCheckC = document.createElement('td');
 
       // Item information
       itemName.textContent = item.itemName;
-      itemBarcode.textContent = item.upc;
       itemStock.textContent = item.stock;
       itemMinStock.textContent = item.minStock;
       itemUBD.textContent = item.usebydate;
+
+      if (item.frozen === "0") {
+        frozenCheckC.textContent = "No";
+      } else {
+        frozenCheckC.textContent = "Yes";
+      }
+
+      if (item.fresh === "0") {
+        freshCheckC.textContent = "No";
+      } else {
+        freshCheckC.textContent = "Yes";
+      }
+
+      if (item.home === "0") {
+        homeCheckC.textContent = "No";
+      } else {
+        homeCheckC.textContent = "Yes";
+      }
 
       // Table structure
       itemStock.align = "center";
       itemMinStock.align = "center";
 
-      itemEStock.id = ("updateStock" + currentItem);
-      itemEStock.type = "number";
-      itemEStock.value = item.stock;
-      itemEStock.min = 0;
-
-      itemEMStock.id = ("updateMinStock" + currentItem);
-      itemEMStock.type = "number";
-      itemEMStock.value = item.minStock;
-      itemEMStock.min = 0;
-
-      itemRemove.id = ("remove-" + currentItem);
-      itemRemove.textContent = "Remove";
-      itemRemove.addEventListener('click', function() {removeItem(this.id);});
-
       elem.table.appendChild(itemRow);
       itemRow.appendChild(itemName);
-      itemRow.appendChild(itemBarcode);
       itemRow.appendChild(itemStock);
       itemRow.appendChild(itemMinStock);
       itemRow.appendChild(itemUBD);
-      itemRow.appendChild(itemEStockC);
-      itemRow.appendChild(itemEMStockC);
-      itemEStockC.appendChild(itemEStock);
-      itemEMStockC.appendChild(itemEMStock);
-      itemRow.appendChild(itemRemoveC);
-      itemRemoveC.appendChild(itemRemove);
+      itemRow.appendChild(frozenCheckC);
+      itemRow.appendChild(freshCheckC);
+      itemRow.appendChild(homeCheckC);
 
       currentItem ++;
     });
@@ -117,6 +117,7 @@ async function fillTable() {
 
 // Grabs the values of input boxes that have information to update (when editing an items stock values)
 async function grabChanges() {
+
   let invList = await returnInventory();
   let currentItem = 0;
   let updateList = [];
@@ -174,7 +175,7 @@ async function grabChanges() {
   // Send the values to update to a handler
   await sendStockEdits(updateList);
   await fillTable();
-  await shoppingAlgorithm(updateBuyList);
+  await shoppingAlgorithm();
 }
 
 // Sends the gathered information from grabChanges and sends it to the server
@@ -203,8 +204,109 @@ async function removeItem(itemNumber) {
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify(payload),
   });
-  filTable();
+  await fillTable();
+  await removeBoth(item2remove);
 }
+
+
+
+
+async function editTable() {
+  elem.invOut.innerHTML = "";
+  elem.buttonContainer.innerHTML = "";
+
+  //let saveButton = '<button type="button" id="saveChanges">Save</button>';
+  let table = '<form id="table"><button type="submit" id="edit">Save</button><table><thead><th>Item Name</th><th>Edit Stock</th><th>Edit Min Stock</th><th>Remove Item</th></thead><tbody id="fill"></tbody><tfoot><td colspan="3" align="right">Total No. of Items</td><td id="totalI"></td></tfoot></table></form>';
+  elem.invOut.innerHTML = table;
+  elem.formEdit = document.querySelector('#table');
+  elem.formEdit.onsubmit = function(e) {
+    e.preventDefault();
+    this.reportValidity();
+    if (this.checkValidity()) {
+      grabChanges();
+    } else {
+      alert('Make sure all fields are filled out');
+    }
+  }
+  elem.table = document.querySelector('#fill');
+  elem.total = document.querySelector('#totalI');
+
+  elem.formEdit.noValidate = true;
+
+  let invList = await returnInventory();
+  if (invList === "Failed") {
+    let itemInfo = document.createElement('p');
+    const itemContent = "Inventory request failed, please refresh page to try again";
+    itemInfo.textContent = itemContent;
+    elem.invOut.appendChild(itemInfo);
+  } else {
+    let currentItem = 0;
+    elem.total.textContent = invList.length;
+
+    invList.forEach(function(item) {
+      let itemRow = document.createElement('tr');
+      let itemName = document.createElement('td');
+      let itemEStockC = document.createElement('td');
+      let itemEMStockC = document.createElement('td');
+      let itemRemoveC = document.createElement('td');
+      let itemEStock = document.createElement('input');
+      let itemEMStock = document.createElement('input');
+      let itemRemove = document.createElement('button');
+
+      itemName.textContent = item.itemName;
+      itemEStock.id = ("updateStock" + currentItem);
+      itemEStock.type = "number";
+      itemEStock.value = item.stock;
+      itemEStock.min = 0;
+      itemEStock.step = 1;
+      itemEStock.required = true;
+
+      itemEMStock.id = ("updateMinStock" + currentItem);
+      itemEMStock.type = "number";
+      itemEMStock.value = item.minStock;
+      itemEMStock.min = 0;
+      itemEMStock.step = 1;
+      itemEMStock.required = true;
+
+      itemEStock.addEventListener('input', function() {
+        event.target.value = event.target.value.replace(/[^0-9]*/g,'');
+      });
+      itemEStock.addEventListener('keydown', function() {
+        if(event.key==='.') {
+          event.preventDefault();
+        }
+      });
+      itemEStock.addEventListener('input', function() {
+        event.target.value = event.target.value.replace(/[^0-9]*/g,'');
+      });
+      itemEStock.addEventListener('keydown', function() {
+        if(event.key==='.') {
+          event.preventDefault();
+        }
+      });
+
+      itemRemove.id = ("remove-" + currentItem);
+      itemRemove.textContent = "Remove";
+      itemRemove.addEventListener('click', function() {removeItem(this.id);});
+
+
+
+      elem.table.appendChild(itemRow);
+      itemRow.appendChild(itemName);
+      itemRow.appendChild(itemEStockC);
+      itemRow.appendChild(itemEMStockC);
+      itemEStockC.appendChild(itemEStock);
+      itemEMStockC.appendChild(itemEMStock);
+      itemRow.appendChild(itemRemoveC);
+      itemRemoveC.appendChild(itemRemove);
+
+      currentItem ++;
+    });
+  }
+}
+
+
+// Automatic Shopping List
 
 async function addItemShopping(item) {
   let shop = {};
@@ -212,7 +314,6 @@ async function addItemShopping(item) {
   shop.name = item.itemName;
   shop.upc = item.upc;
   shop.toBuy = item.minStock - item.stock;
-  console.log(shop);
 
   const response = await fetch('/itemL', {
     method: 'POST',
@@ -267,7 +368,7 @@ async function shouldRemoveShopping(item) {
   }
 }
 
-async function shoppingAlgorithm(updateBuyList) {
+async function shoppingAlgorithm() {
   let fullInventory = await returnInventory();
 
   // Cycle through full inventory
@@ -275,21 +376,13 @@ async function shoppingAlgorithm(updateBuyList) {
     let item = fullInventory[p];
     // If the item should be added
     if (await shouldRemoveShopping(item)) {
-      removeItem(item);
+      removeItemShopping(item);
     }
     // If the item should be removed
     else if (await shouldAddToShopping(item)) {
-      addItem(item);
+      addItemShopping(item);
     }
   }
-}
-
-function addItem(item) {
-  addItemShopping(item);
-}
-
-function removeItem(item) {
-  removeItemShopping(item);
 }
 
 async function isInList(itemID) {
@@ -308,6 +401,14 @@ async function isInList(itemID) {
   } else if (weewoo === "Failed") {
     console.log("Request Failed");
     return false;
+  }
+}
+
+
+async function removeBoth(item) {
+  let itemID = item.id;
+  if (isInList(itemID)) {
+    removeItemShopping(item);
   }
 }
 

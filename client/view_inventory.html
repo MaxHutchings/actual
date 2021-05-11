@@ -2,46 +2,31 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Inventory</title>
     <script src="/js/inventory.js"></script>
+    <script src="/js/master.js"></script>
     <link rel="stylesheet" href="/css/master.css">
     <link rel="stylesheet" href="/css/inventory.css">
   </head>
 
   <body>
-    <nav>
-      <ul class="navBar">
-        <li><a href="index">HOME</a></li>
-        <li><a href="create_item">CREATE ITEM</a></li>
-        <li><a href="view_inventory">INVENTORY</a></li>
-        <li><a href="shopping_list">SHOPPING LIST</a></li>
-      </ul>
-    </nav>
+    <div class="topnav" id="myTopnav">
+      <a href="index">Home</a>
+      <a href="create_item">Create Item</a>
+      <a href="view_inventory">Inventory</a>
+      <a href="shopping_list">Shopping List</a>
+      <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <i class="fa fa-bars">≡</i>
+      </a>
+    </div>
 
     <main>
 
       <div>
         <h1>Inventory</h1>
-        <button type="button" id="saveChanges">Save Changes</button>
+        <div id="buttons"></div>
         <div id="inventory"></div>
-
-        <table>
-          <thead>
-            <th>Item Name</th>
-            <th>Barcode</th>
-            <th>Stock</th>
-            <th>Minimum Stock</th>
-            <th>Use-By-Date</th>
-            <th>Edit Stock</th>
-            <th>Edit Min Stock</th>
-            <th>Remove Item</th>
-          </thead>
-          <tbody id="fill"></tbody>
-          <tfoot>
-            <td colspan="7" align="right">Total No. of Items</td>
-            <td id="totalI"></td>
-          </tfoot>
-        </table>
       </div>
 
     </main>

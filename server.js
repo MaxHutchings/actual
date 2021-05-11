@@ -5,13 +5,19 @@ const express = require('express');
 const app = express();
 const inventoryDB = require('./inventory');
 const shoppingDB = require('./shopping');
-const multer = require('multer');
+
+// Packages needed to handle barcode scanning and searching
 const Quagga = require('quagga').default;
+const bc = require('barcodelookup');
 
+// Packages to handle file uploads and renaming
+const multer = require('multer');
+const md5File = require('md5-file/promise');
+const config = require('./config.json');
+const configuredMulter = multer(config);
+const single = configuredMulter.single('md5me');
 
-const upload = multer({dest: 'uploads/'});
-
-
+const fs = require('fs');
 
 
 // Removes the need to have html at the end of the URL
@@ -20,57 +26,20 @@ app.use(express.static('client', {extensions: ['html']}));
 
 // *** TEST AREA ***
 
-// ***FOR LATER USE***
-app.post("/upload",
-upload.single("image.png"),
-(req, res) => {
-  const tempPath = req.file.path;
-  const targetPath = path.join(__dirname, "./uploads/image.png");
-
-  if (path.extname(req.file.originalname).toLowerCase() === ".png") {
-    fs.rename(tempPath, targetPath, err => {
-      if (err) return handleError(err, res);
-
-      res
-        .status(200)
-        .contentType("text/plain")
-        .end("File uploaded!");
-    });
-  } else {
-    fs.unlink(tempPath, err => {
-      if (err) return handlerError(err, res);
-
-      res
-        .status(403)
-        .contentType("text/plain")
-        .end("Only .png files are allowed!");
-    });
-  }
-});
 
 
 // *** END OF TEST AREA ***
 
-async function getBarcode(req, res) {
-  let imageURL = await req.body.image;
-  let testing = doThing(imageURL);
-  console.log(testing);
-}
-
-function doThing(imageURL) {
-  return new Promise(resolve => {
-    let img = new Image();
-    img.onload = () => {
-      URL.revokeObjectURL(imageURL);
-      resolve(img);
-    };
-    img.src = imageURL;
+async function barcodeAlgo(req, res) {
+  let newFileName = 'uploads/' + req.file.filename + '.jpg';
+  await fs.renameSync(req.file.path, newFileName, function(err) {
+    if (err) {
+      console.log('ERROR: ' + err);
+    }
   });
-}
 
-function runBarcodeAPI(image) {
   Quagga.decodeSingle({
-      src: image,
+      src: newFileName,
       numOfWorkers: 0,
       inputStream: {
         size: 800
@@ -78,13 +47,31 @@ function runBarcodeAPI(image) {
       decoder: {
         readers: ["ean_reader"]
       },
-  }, function(result) {
-      if(result.codeResult) {
-          console.log("result", result.codeResult.code);
-      } else {
-          console.log("not detected");
-      }
+  }, async function(result) {
+    console.log(result);
+    if (result === undefined) {
+      res.json({error: "Cannot read barcode"});
+    } else if (result.codeResult) {
+      let products = await searchBarcode(result.codeResult.code);
+      res.json(await products[0]);
+    } else {
+      res.json({error: "Cannot read barcode"});
+    }
   });
+  fs.unlinkSync(newFileName);
+}
+
+async function searchBarcode(barcode) {
+  let response = await bc.lookup({key: 'ezsaswc1z9oassgrgj4rpxow70vr7o', barcode: barcode});
+  let products;
+  if (response.statusCode === 200) {
+    products = await response.data.products;
+  } else if (response.statusCode === 404) {
+    products = [{error: "Server Error"}];
+  } else {
+    products = [{error: "Request Failed"}];
+  }
+  return products;
 }
 
 
@@ -160,10 +147,10 @@ function asyncWrap(f) {
 
 // Request handlers
 app.get('/inventory', express.json(), asyncWrap(getInventory));
+app.post('/upload', single, asyncWrap(barcodeAlgo));
 app.post('/item', express.json(), asyncWrap(postInv));
 app.post('/update', express.json(), asyncWrap(updateStock));
 app.post('/remove', express.json(), asyncWrap(removeItem));
-app.post('/img_barcode', express.json(), asyncWrap(getBarcode));
 
 app.get('/list', express.json(), asyncWrap(getList));
 app.post('/removeL', express.json(), asyncWrap(removeList));

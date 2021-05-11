@@ -1,5 +1,22 @@
+th {
+  text-align: left;
+  white-space: nowrap;
+}
+
+td {
+  white-space: nowrap;
+}
+
 tfoot {
   text-align: right;
+}
+
+table {
+  width: 100%;
+}
+
+#inventory {
+  overflow-x: auto;
 }
 
 #totalI {
@@ -9,5 +26,10 @@ tfoot {
 input[type="number"] {
   background-color: #1B2132;
   color: white;
+  width: 100%;
   text-align: center;
+}
+
+input:invalid {
+  border: 2px dashed red;
 }

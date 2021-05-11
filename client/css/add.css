@@ -1,0 +1,41 @@
+input[type=checkbox] {
+  -webkit-appearance: checkbox;
+}
+
+input[type=submit] {
+  background-color: #0059a6;
+  color: white;
+  padding: 15px 32px;
+}
+
+input[type=submit]:hover {
+  background-color: #ffa112;
+}
+
+label {
+  display: block;
+}
+
+input[type=text] {
+  height: 100%;
+  display: block;
+}
+
+form {
+  background-color: #666666;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+#showExtra {
+  display: block;
+}
+
+#imageContainer {
+  width: 100%;
+}

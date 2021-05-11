@@ -10,11 +10,17 @@ async function init() {
 
 const dbPromise = init();
 
+fuckYou();
+
+async function fuckYou() {
+  const db = await dbPromise;
+  await db.run('DELETE FROM ShoppingList WHERE id = ?', ['1388bad7-a3dd-4983-9a18-6cc37ab71584']);
+}
 
 async function getList() {
   const db = await dbPromise;
   const list = await db.all('SELECT * FROM ShoppingList');
-  return list
+  return list;
 }
 
 async function addItem(item) {

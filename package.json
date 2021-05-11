@@ -10,7 +10,10 @@
   "author": "Max Hutchings",
   "license": "ISC",
   "dependencies": {
+    "barcodelookup": "^1.0.6",
     "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "md5-file": "^3.2.3",
     "multer": "^1.4.2",
     "quagga": "^0.12.1",
     "sqlite": "^3.0.3",

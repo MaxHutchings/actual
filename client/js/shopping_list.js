@@ -26,6 +26,11 @@ async function fetchList() {
 
 async function fillTable() {
   let list = await fetchList();
+
+  if (list.length === 0) {
+
+  }
+
   elem.shopList.innerHTML = "";
   if (list !== "Failed") {
     for (let i = 0; i < list.length; i++) {

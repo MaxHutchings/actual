@@ -1,39 +1,17 @@
+:root {
+  --button_padding: 15px 32px;
+}
+
+@media only screen and (max-width: 600px) {
+  :root {
+    --button_padding: 5px 15px;
+  }
+}
+
 * {
   border: 0;
   margin: 0;
   padding: 0;
-}
-
-nav {
-  height: 30px;
-  overflow: hidden;
-}
-
-nav ul {
-  list-style-type: none;
-  position: fixed;
-  width: 100%;
-}
-
-nav li {
-  background-color: #ffa112;
-  float: left;
-  width: 25%;
-  padding: 0px;
-}
-
-nav li a {
-  color: black;
-  display: inline-block;
-  padding: 14px 16px;
-  text-decoration: none;
-  margin: 0px;
-  width: 100%;
-  height: 100%;
-}
-
-nav li:hover {
-  background-color: #0059a6;
 }
 
 body {
@@ -45,26 +23,72 @@ main {
   color: white;
 }
 
-input {
-  width: 100%;
-  height: 100%;
-}
-
-input, label {
-  display: block;
-}
-
-form {
-  background-color: #666666;
-  padding-left: 30px;
-  padding-right: 30px;
-}
-
 button {
   background-color: #0059a6;
-  padding: 15px 32px;
+  color: white;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  padding: var(--button_padding);
+}
+
+input[type="submit"] {
+  padding: var(--button_padding);
 }
 
 button:hover {
   background-color: #ffa112;
+}
+
+main {
+  padding-left: 1%;
+  padding-right: 1%;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav a {display: none;}
+  .topnav a.icon {
+    display: block;
+    float: right;
+    height: 100%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive a.icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+}
+
+
+.topnav {
+  background-color: #ffa112;
+  overflow: hidden;
+  width: 100%;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #0059a6;
+  color: black;
+}
+
+
+.topnav .icon {
+  display: none;
 }
